@@ -1,0 +1,5 @@
+model,accuracy_mean,accuracy_std,precision_mean,precision_std,recall_mean,recall_std,f1_mean,f1_std,roc_auc_mean,roc_auc_std
+Dummy (most frequent),0.738,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0
+LogisticRegression,0.758,0.017,0.592,0.078,0.229,0.05,0.33,0.064,0.727,0.012
+LogisticRegression (balanced),0.675,0.009,0.422,0.011,0.66,0.031,0.515,0.015,0.727,0.012
+RandomForest,0.751,0.013,0.6,0.11,0.138,0.037,0.223,0.057,0.714,0.005

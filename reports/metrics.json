@@ -1,0 +1,44 @@
+{
+  "tuning": {
+    "scoring": "roc_auc",
+    "best_params": {
+      "model__C": 0.1,
+      "model__class_weight": "balanced"
+    },
+    "best_mean": 0.727,
+    "best_std": 0.012,
+    "untuned_mean": 0.727,
+    "untuned_std": 0.012,
+    "improvement": 0.0,
+    "beats_spread": false
+  },
+  "leakage": {
+    "column": "fee_charged",
+    "honest_roc_auc": 0.727,
+    "with_leaky_column_roc_auc": 0.923
+  },
+  "threshold": 0.48,
+  "test": {
+    "confusion_matrix": [
+      [
+        484,
+        254
+      ],
+      [
+        80,
+        182
+      ]
+    ],
+    "precision": 0.417,
+    "recall": 0.695,
+    "f1": 0.521,
+    "roc_auc": 0.728
+  },
+  "costs": {
+    "calling_nobody": 9170,
+    "calling_everybody": 8000,
+    "using_model": 6288
+  },
+  "test_rows": 1000,
+  "test_no_show_rate": 0.262
+}
