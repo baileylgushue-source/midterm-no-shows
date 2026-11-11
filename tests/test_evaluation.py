@@ -37,10 +37,13 @@ def test_choose_threshold():
 
     threshold = choose_threshold(y_true, probabilities)
 
-    assert total_cost(
-        y_true,
-        [p >= threshold for p in probabilities],
-    ) == 16
+    assert (
+        total_cost(
+            y_true,
+            [p >= threshold for p in probabilities],
+        )
+        == 16
+    )
 
 
 def test_compare_costs():
@@ -52,6 +55,7 @@ def test_compare_costs():
     assert results["calling_nobody"] == 70
     assert results["calling_everybody"] == 32
     assert results["using_model"] == 16
+
 
 @pytest.mark.parametrize(
     "y_true, flagged, expected_cost",

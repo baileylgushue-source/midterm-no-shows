@@ -1,4 +1,3 @@
-
 import numpy as np
 
 CALL_COST = 8
@@ -12,10 +11,7 @@ def total_cost(y_true, flagged):
     calls = np.sum(flagged)
     missed_without_call = np.sum((y_true == 1) & (~flagged))
 
-    return int(
-        CALL_COST * calls
-        + MISSED_NO_SHOW_COST * missed_without_call
-    )
+    return int(CALL_COST * calls + MISSED_NO_SHOW_COST * missed_without_call)
 
 
 def choose_threshold(y_true, probabilities):

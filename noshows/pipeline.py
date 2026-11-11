@@ -41,37 +41,34 @@ def split_data(frame):
 
 
 def build_preprocessor():
-    numeric_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="median")),
-        ("scaler", StandardScaler()),
-    ])
+    numeric_pipeline = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+    )
 
-    categorical_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("encoder", OneHotEncoder(handle_unknown="ignore")),
-    ])
+    categorical_pipeline = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("encoder", OneHotEncoder(handle_unknown="ignore")),
+        ]
+    )
 
-    preprocessor = ColumnTransformer([
-        ("numeric", numeric_pipeline, NUMERIC_FEATURES),
-        ("categorical", categorical_pipeline, CATEGORICAL_FEATURES),
-    ])
+    preprocessor = ColumnTransformer(
+        [
+            ("numeric", numeric_pipeline, NUMERIC_FEATURES),
+            ("categorical", categorical_pipeline, CATEGORICAL_FEATURES),
+        ]
+    )
 
     return preprocessor
 
 
 def build_pipeline(model):
-    return Pipeline([
-        ("preprocessor", build_preprocessor()),
-        ("model", model),
-    ])
-
-
-
-   
-
-
-
-
-
-
-
+    return Pipeline(
+        [
+            ("preprocessor", build_preprocessor()),
+            ("model", model),
+        ]
+    )
