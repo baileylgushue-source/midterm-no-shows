@@ -275,6 +275,6 @@ be recreated.
 - The page checks one booking at a time and stores no booking data.
   It cannot see rescheduling history or changes across earlier bookings.
 
-  ##Presentation Recording Link
+  ## Presentation Recording Link
 
   https://humberital-my.sharepoint.com/:v:/g/personal/n10041639_humber_ca/IQAOGql4vhd2TL6GSaqEf5RtAU_00tMmCcapo40GztYzKYo?e=BHXGW9&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D
