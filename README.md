@@ -53,8 +53,8 @@ requirements-dev.txt.
 |---|---|
 | Bailey | Steps 1–2: Repository and environment setup; unchanged data.py; pipeline.py and evaluation.py with tests and the hand-worked cost example. |
 | Ankitha | Step 3: Training, model comparison, tuning, saved outputs and leakage check. |
-| Yule | Step 4: Appointment and NoShowPredictor classes and their tests. |
-| Gurleen | Steps 5 and 7: Gradio app, input checks and public Hugging Face Space deployment. |
+| Yule | Steps 4 and 7: Appointment and NoShowPredictor classes and their tests, and public Hugging Face Space deployment. |
+| Gurleen | Step 5: Gradio app, and input checks. |
 | Janmesh Bhavsar | Step 6: Deployment tests, README report and verification of formatting, lint and tests. |
 | Yoh | Step 8: Fresh-clone verification, training reproducibility, final checks, demo rehearsal and submission coordination. |
 
