@@ -20,7 +20,7 @@ and recommends whether the front desk should call to confirm.
 A confirmation call costs $8. An unflagged no-show costs $35.
 The model chooses a calling threshold using out-of-fold training predictions.
 
-Public Space URL: Pending deployment.
+Public Space: [Open Maple Physio no-show check](https://huggingface.co/spaces/heli2062/midterm-no-shows)
 
 ## How to run it locally
 
@@ -37,7 +37,7 @@ Recreate the saved pipeline and reports:
 python -m noshows.train
 ```
 
-Run the page once app.py has been added:
+Run the page:
 
 ```bash
 gradio app.py
@@ -49,10 +49,17 @@ requirements-dev.txt.
 
 ## Team
 
-| Member | Parts owned |
+| Member | Assigned responsibilities |
 |---|---|
-| Janmesh Bhavsar | Deployment tests and README report |
-| To be completed | Add remaining members and their contributions |
+| Bailey | Steps 1–2: Repository and environment setup; unchanged data.py; pipeline.py and evaluation.py with tests and the hand-worked cost example. |
+| Ankitha | Step 3: Training, model comparison, tuning, saved outputs and leakage check. |
+| Yule | Step 4: Appointment and NoShowPredictor classes and their tests. |
+| Gurleen | Steps 5 and 7: Gradio app, input checks and public Hugging Face Space deployment. |
+| Janmesh Bhavsar | Step 6: Deployment tests, README report and verification of formatting, lint and tests. |
+| Yoh | Step 8: Fresh-clone verification, training reproducibility, final checks, demo rehearsal and submission coordination. |
+
+The table records assigned responsibilities. All members are expected
+to review changes and participate in the demo.
 
 ## Decisions
 
@@ -61,6 +68,60 @@ The dataset contains 4,000 synthetic appointments. We use a stratified
 
 Model comparison, hyperparameter tuning and threshold selection use
 only training data. The held-out test set is evaluated after these choices.
+
+### Features
+
+| Column | Decision and reason |
+|---|---|
+| lead_days | Use: booking lead time is known before the visit. |
+| age | Use: patient age is available at booking. |
+| prior_no_shows | Use: previous missed appointments are known. |
+| hour | Use: the scheduled appointment hour is known. |
+| weekday | Use: the scheduled weekday is known. |
+| booking | Use: the booking channel is known. |
+| insurance | Use: the insurance category is available at booking. |
+| treatment | Use: the booked treatment is known. |
+| first_visit | Use: first-visit status is known. |
+| distance_km | Use: distance may affect attendance; missing values are imputed. |
+| appointment_id | Exclude: it identifies a row rather than a useful booking characteristic. |
+| fee_charged | Exclude: it is recorded after the visit and leaks the outcome. |
+| no_show | Target only: this is the outcome being predicted. |
+
+### Input checks
+
+| Field | Accepted values |
+|---|---|
+| lead_days | 0–120 |
+| age | 12–110 |
+| prior_no_shows | 0–30 |
+| hour | 8–17 |
+| first_visit | 0 or 1 |
+| distance_km | 0.1–150, or empty |
+| weekday | mon, tue, wed, thu, fri |
+| booking | online, phone, front_desk |
+| insurance | private, provincial, self_pay |
+| treatment | physio, massage, acupuncture |
+
+The numeric limits follow the project specification and are slightly
+wider than the training ranges to accommodate plausible bookings.
+They still reject values far outside the data the model learned from.
+The exception is hour: 8–17 exactly matches the clinic's operating
+hours and the training range.
+
+Appointment validates values when created and cannot be changed afterwards.
+Only missing distance is accepted; the pipeline replaces it with the median
+learned from training data. The page must warn when this happens.
+
+Numeric features use median imputation and standard scaling. Categorical
+features use most-frequent imputation and one-hot encoding.
+
+The encoder uses handle_unknown="ignore", so an unseen category would
+be silently encoded without matching any known category. Appointment
+therefore rejects unknown values explicitly.
+
+Dropdowns help prevent mistakes on the page, but the Space can also
+be called through its API without using the page. Validation belongs
+in Appointment so the same rules apply to both entry points.
 
 ## Model comparison
 
@@ -158,51 +219,7 @@ predict_proba output has not been established as a calibrated real-world
 probability. The calling threshold is therefore chosen empirically
 from training predictions using the stated cost rule.
 
-### Features
 
-| Column | Decision and reason |
-|---|---|
-| lead_days | Use: booking lead time is known before the visit. |
-| age | Use: patient age is available at booking. |
-| prior_no_shows | Use: previous missed appointments are known. |
-| hour | Use: the scheduled appointment hour is known. |
-| weekday | Use: the scheduled weekday is known. |
-| booking | Use: the booking channel is known. |
-| insurance | Use: the insurance category is available at booking. |
-| treatment | Use: the booked treatment is known. |
-| first_visit | Use: first-visit status is known. |
-| distance_km | Use: distance may affect attendance; missing values are imputed. |
-| appointment_id | Exclude: it identifies a row rather than a useful booking characteristic. |
-| fee_charged | Exclude: it is recorded after the visit and leaks the outcome. |
-| no_show | Target only: this is the outcome being predicted. |
-
-### Input checks
-
-| Field | Accepted values |
-|---|---|
-| lead_days | 0–120 |
-| age | 12–110 |
-| prior_no_shows | 0–30 |
-| hour | 8–17 |
-| first_visit | 0 or 1 |
-| distance_km | 0.1–150, or empty |
-| weekday | mon, tue, wed, thu, fri |
-| booking | online, phone, front_desk |
-| insurance | private, provincial, self_pay |
-| treatment | physio, massage, acupuncture |
-
-These numeric limits follow the project specification. They allow modest
-variation beyond the training data while refusing clearly unsupported inputs.
-
-Appointment validates values when created and cannot be changed afterwards.
-Only missing distance is accepted; the pipeline replaces it with the median
-learned from training data. The page must warn when this happens.
-
-Numeric features use median imputation and standard scaling. Categorical
-features use most-frequent imputation and one-hot encoding.
-
-The encoder uses handle_unknown="ignore", but Appointment rejects unknown
-categories so that misspellings are not silently scored as unfamiliar values.
 
 ## Tests
 
@@ -229,8 +246,9 @@ python -m ruff check .
 python -m pytest
 ```
 
-The deployment test requires the app_file declared in the README
-to exist. Deployment is incomplete until app.py has been added.
+With app.py present, Ruff formatting and lint checks passed,
+and all 80 test cases passed in the working clone.
+Fresh-clone verification remains a separate final submission check.
 
 Before submission, repeat the checks from a fresh clone and run
 python -m noshows.train to verify that the model and reports can
@@ -254,3 +272,5 @@ be recreated.
   has not been evaluated.
 - The model score has not been calibrated or validated on real clinic
   data and should support, rather than replace, staff judgment.
+- The page checks one booking at a time and stores no booking data.
+  It cannot see rescheduling history or changes across earlier bookings.
